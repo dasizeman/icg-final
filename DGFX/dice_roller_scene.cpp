@@ -240,6 +240,9 @@ namespace dgfx {
 
              }
 
+             if (hit)
+                 break;
+
          }
 
      }

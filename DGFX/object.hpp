@@ -9,7 +9,6 @@ class Object : public Entity {
         Object(float x, float y, float z, float xrot, float yrot, float zrot);
     protected:
 
-
         float m_x, m_y, m_z;
         vec4 m_ambient, m_diffuse, m_specular;
         std::vector<vec4> m_vertices;

@@ -18,7 +18,8 @@ protected:
     std::vector<std::string>  m_shaderNames;
     bool m_doAnimation = false;
     bool m_alive = true;
-
+    
+    std::shared_ptr<Scene> m_scene;
 	
     // Called by the scene to set up GL data structures
     virtual void init(std::map<std::string, GLuint>& shaderMap) = 0;

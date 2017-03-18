@@ -52,6 +52,7 @@ namespace dgfx {
 
 
     void Scene::addEntity(std::unique_ptr<Entity> entity) {
+        entity->m_scene = Scene::m_instance;
         entity->setShader( m_shaderMap );
         entity->init( m_shaderMap );
 

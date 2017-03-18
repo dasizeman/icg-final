@@ -9,7 +9,7 @@ namespace dgfx {
 
     void Burst::generateGeometry() {
         for (int i = 0; i < 300; i++ )
-            m_vertices.push_back( vec4( m_x, m_y, m_z, 1.0 ) );
+            m_vertices.push_back( vec4( 0, 0, 0, 1.0 ) );
 
         // We will set every texture coord to zero since we will be using single
         // color "textures"
@@ -36,7 +36,7 @@ namespace dgfx {
         int numSteps = 25;
         float stepSize = 2*M_PI / numSteps;
 
-        for (float phi = 0; phi < M_PI; phi += stepSize / 2)
+        for (float phi = 0; phi < M_PI; phi += stepSize)
             for ( float theta = 0; theta < 2 * M_PI; theta += stepSize ) {
                 float x = sin(phi) * cos(theta);
                 float y = sin(phi) * sin(theta);
@@ -53,9 +53,10 @@ namespace dgfx {
 
             }
 
-        // Start all particles at the center point
+        // Start all particles at the center point. This x,y,z is in model
+        // coordinates
         for (int i = 0; i < m_directionVectors.size(); i++ )
-            m_particlePositions.push_back( vec4( m_x, m_y, m_z, 1.0) );
+            m_particlePositions.push_back( vec4( 0, 0, 0, 1.0) );
     }
 
     void Burst::draw(std::map<std::string, GLuint>& shaderMap) {
@@ -84,7 +85,7 @@ namespace dgfx {
             vec4 pos = m_particlePositions[i];
 
             glUniformMatrix4fv(glGetUniformLocation( m_activeShader, "model_matrix" ),1, GL_TRUE, 
-                    Translate(pos.x, pos.y, pos.z));
+                     Translate(m_x, m_y, m_z) * Translate(pos.x, pos.y, pos.z));
             
             glDrawArrays( GL_POINTS, i, i+1 );
 

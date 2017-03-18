@@ -1,4 +1,5 @@
 #include "cube.hpp"
+#include "burst.hpp"
 #include "dice_roller_scene.hpp"
 namespace dgfx {
     Cube::Cube(float x, float y, float z, float xrot, float yrot, float zrot) : Object(x,y,z, xrot, yrot, zrot){}
@@ -112,7 +113,9 @@ namespace dgfx {
     
     void Cube::wasPicked( uint16_t triangleIdx ) {
         std::cout << "A cube was picked, triangle " << triangleIdx << std::endl; 
-
+        
+        // Create a burst at our location
+        m_scene->addEntity(std::unique_ptr<Entity>(new Burst(m_x, m_y, m_z)));
         // kys
         m_alive = false;
     }

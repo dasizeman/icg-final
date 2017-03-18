@@ -24,7 +24,7 @@ int main(int argc, char **argv) {
     //scene->addEntity(std::unique_ptr<Entity>(new Plane(0, 0, 0, 0,0, 0, 100)));
     for (float y = 0.5; y < 5.5; y++)
        for (float x = -2; x <= 2; x++)
-            scene->addEntity(std::unique_ptr<Entity>(new Burst(x, y, -4)));
+            scene->addEntity(std::unique_ptr<Entity>(new Cube(x, y, -4, 0, 0, 0)));
 
 
     scene->start();
