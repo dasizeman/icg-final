@@ -15,3 +15,6 @@ Everything else from A6
 Picking (calls object's wasPicked() method)
 
 Objects "die" and are removed from the scene when picked
+
+
+To build, run ./build.sh in the FinalProject directory.  It will place an executable called "Main" there.
