@@ -46,7 +46,7 @@ namespace dgfx {
 
 
         glEnable (GL_DEPTH_TEST);
-        glClearColor( 1.0, 1.0, 1.0, 1.0 );
+        glClearColor( 0.0, 0.0, 0.0, 1.0 );
 
     }
 
