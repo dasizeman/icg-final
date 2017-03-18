@@ -3,7 +3,6 @@
 
 #include "scene.hpp"
 #include "daveutils.hpp"
-#include "geometry.hpp"
 
 namespace dgfx {
 
