@@ -70,39 +70,5 @@ namespace dgfx {
         static void close_handler();
 
     };
-
-
-    /*
-    class A4Scene : public Scene {
-    public:
-        A4Scene();
-
-    protected:
-	 void keyboardHandler(unsigned char key, int x, int y);
-         void specialKeyHandler(int key, int x, int y);
-	 void displayCallback();
-	 void clickHandler(GLint button, GLint state, GLint x, GLint y);
-         void pickTriangle( uint16_t x, uint16_t y );
-         float rayIntersectsPlane( vec3 ray, vec3 e, vec3 f, vec3 g );
-         bool insideTest( vec3 e, vec3 f, vec3 g, vec3 point );
-         vec3 FourDto3d( vec4 vector );
-    };
-    */
-
-    class A5Scene : public Scene {
-    public:
-        A5Scene();
-    const static std::string FRAGMENT_LIGHTING_SHADER_NAME,
-          VERTEX_LIGHTING_SHADER_NAME, FRAGMENT_TEXTURE_SHADER_NAME;
-
-    protected:
-	 void keyboardHandler(unsigned char key, int x, int y);
-         void specialKeyHandler(int key, int x, int y);
-	 void displayCallback();
-	 void timerCallback( int value );
-    };
-
-
-
 }
 #endif
