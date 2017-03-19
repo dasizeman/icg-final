@@ -44,8 +44,10 @@ namespace dgfx {
         glTexParameterf(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         glTexParameterf(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 
+        std::cout << textures[0] << "\n";
         GLubyte *front, *back, *left, *right, *top, *bottom;
         top = ppmRead(textures[0].c_str(), &width, &height);
+        std::cout << "hey!\n";
         glTexImage2D( GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0 , GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, top);
         bottom = ppmRead(textures[1].c_str(), &width, &height);
         glTexImage2D( GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0 , GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, bottom);
@@ -82,7 +84,7 @@ namespace dgfx {
         std::cout << "A cube was picked, triangle " << triangleIdx << std::endl; 
         
         // Create a burst at our location
-        /* m_scene->addEntity(std::unique_ptr<Entity>(new Burst(m_x, m_y, m_z))); */
+        m_scene->addEntity(std::unique_ptr<Entity>(new Burst(m_x, m_y, m_z)));
         // kys
         m_alive = false;
     }

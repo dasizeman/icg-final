@@ -6,6 +6,7 @@
 #include "scene.hpp"
 #include "dice_roller_scene.hpp"
 #include "cube.hpp"
+#include "ghost.hpp"
 #include "burst.hpp"
 #include "plane.hpp"
 #include "Angel.h"
@@ -25,17 +26,7 @@ int main(int argc, char **argv) {
     /* for (float y = 0.5; y < 5.5; y++) */
     /*    for (float x = -2; x <= 2; x++) */
     
-    std::vector<std::string> textures;
-    /* for(int i = 0; i < 6; i++){ */
-    /*   textures.push_back("textures/crate_texture.ppm"); */
-    /* } */
-    textures.push_back("textures/sky-top.ppm");
-    textures.push_back("textures/sky-bottom.ppm");
-    textures.push_back("textures/sky-left.ppm");
-    textures.push_back("textures/sky-left.ppm");
-    textures.push_back("textures/sky-front.ppm");
-    textures.push_back("textures/sky-back.ppm");
-    scene->addEntity(std::unique_ptr<Entity>(new Cube(-2, 0.5, -4, 0, 0, 0, textures)));
+    scene->addEntity(std::unique_ptr<Entity>(new Ghost(-2, 0.5, -4, 0, 0, 0)));
 
 
     scene->start();

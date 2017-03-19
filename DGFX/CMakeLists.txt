@@ -7,4 +7,5 @@ add_library (DGFX
             plane.cpp 
             camera.cpp 
             light.cpp
+            ghost.cpp
             burst.cpp)
