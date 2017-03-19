@@ -1,11 +1,13 @@
 #ifndef __CUBE_H__
 #define __CUBE_H__
 #include "object.hpp"
+
 namespace dgfx {
 class Cube : public Object {
     public:
-        Cube(float x, float y, float z, float xrot, float yrot, float zrot);
+        Cube(float x, float y, float z, float xrot, float yrot, float zrot, std::vector<std::string> text);
         GLuint m_activeTextureHandle = 0;
+        std::vector<std::string> textures;
     protected:
         void makeQuad(GLubyte a, GLubyte b, GLubyte c, GLubyte d, vec4 *vertices);
         virtual void generateGeometry();

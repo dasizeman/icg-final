@@ -2,7 +2,9 @@
 #include "burst.hpp"
 #include "dice_roller_scene.hpp"
 namespace dgfx {
-    Cube::Cube(float x, float y, float z, float xrot, float yrot, float zrot) : Object(x,y,z, xrot, yrot, zrot){}
+    Cube::Cube(float x, float y, float z, float xrot, float yrot, float zrot, std::vector<std::string> text) : Object(x,y,z, xrot, yrot, zrot){
+      textures = text;
+    }
 
     void Cube::generateGeometry() {
   	vec4 vertices[] = {vec4(-0.5,-0.5,0.5,1.0),vec4(-0.5,0.5,0.5,1.0),vec4(0.5,0.5,0.5,1.0),vec4(0.5,-0.5,0.5,1.0), vec4(-0.5,-0.5,-0.5,1.0),vec4(-0.5,0.5,-0.5,1.0),vec4(0.5,0.5,-0.5,1.0),vec4(0.5,-0.5,-0.5,1.0)};
@@ -13,18 +15,6 @@ namespace dgfx {
          makeQuad(6,5,1,2, vertices);  //top
          makeQuad(4,5,6,7, vertices);  //back
          makeQuad(5,4,0,1, vertices);  //left
-
-        // Do a basic plane mapping for each side
-        for (int i = 0; i < 6; i++ ) {
-            m_textureCoords.push_back( vec2(0,0) );
-            m_textureCoords.push_back( vec2(1,0) );
-            m_textureCoords.push_back( vec2(1,1) );
-
-            m_textureCoords.push_back( vec2(0,0) );
-            m_textureCoords.push_back( vec2(1,1) );
-            m_textureCoords.push_back( vec2(0,1) );
-        }
-
 
     }
 
@@ -43,67 +33,44 @@ namespace dgfx {
     }
 
     void Cube::textureInit() {
-        glBindBuffer( GL_ARRAY_BUFFER , m_vertexBuffers[2] );
-        glBufferData( GL_ARRAY_BUFFER, m_textureCoords.size() * sizeof(vec2), &m_textureCoords[0], GL_STATIC_DRAW );
-        GLuint vTexCoordLoc = glGetAttribLocation( m_activeShader, "vTexCoord" );
-        glEnableVertexAttribArray( vTexCoordLoc );
-        glVertexAttribPointer( vTexCoordLoc, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0) );
-
-        m_textureHandles.resize(2);
-        glGenTextures( 2, &m_textureHandles[0] );
+        m_textureHandles.resize(1);
+        glGenTextures( 1, &m_textureHandles[0] );
         int width = 512, height = 512;
 
-        GLubyte *image = (ppmRead("textures/crate_texture.ppm", &width, &height));
         glBindTexture( GL_TEXTURE_2D, m_textureHandles[0] );
-        glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image );
-        glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
-        glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
-        glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
-        glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
+        glTexParameterf(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameterf(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameterf(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameterf(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glTexParameterf(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 
-        
-        width = 332, height = 337;
+        GLubyte *front, *back, *left, *right, *top, *bottom;
+        top = ppmRead(textures[0].c_str(), &width, &height);
+        glTexImage2D( GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0 , GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, top);
+        bottom = ppmRead(textures[1].c_str(), &width, &height);
+        glTexImage2D( GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0 , GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, bottom);
+        right = ppmRead(textures[2].c_str(), &width, &height);
+        glTexImage2D( GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0 , GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, right);
+        left = ppmRead(textures[3].c_str(), &width, &height);
+        glTexImage2D( GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0 , GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, left);
+        front = ppmRead(textures[4].c_str(), &width, &height);
+        glTexImage2D( GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0 , GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, front);
+        back = ppmRead(textures[5].c_str(), &width, &height);
+        glTexImage2D( GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0 , GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, back);
 
-        GLubyte *image2 = (ppmRead("textures/rollsafe.ppm", &width, &height));
-        glBindTexture( GL_TEXTURE_2D, m_textureHandles[1] );
-        glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image2 );
-        glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
-        glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
-        glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
-        glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
-
-
+        delete[] front;
+        delete[] back;
+        delete[] left;
+        delete[] right;
+        delete[] top;
+        delete[] bottom;
     }
 
     void Cube::textureDraw() {
-
-        /*
-        // We don't want mat properties for textures
-        GLuint shaderLoc = glGetUniformLocation( m_activeShader, "AmbientMaterial" );
-        glUniform4fv( shaderLoc, 1, vec4(1,1,1,1) );
-        shaderLoc = glGetUniformLocation( m_activeShader, "SpecularMaterial" );
-        glUniform4fv( shaderLoc, 1, vec4(1,1,1,1) );
-        shaderLoc = glGetUniformLocation( m_activeShader, "DiffuseMaterial" );
-        glUniform4fv( shaderLoc, 1, vec4(1,1,1,1) );
-        shaderLoc = glGetUniformLocation( m_activeShader, "Shininess" );
-        glUniform1f( shaderLoc, 1.0 );
-        */
-
-        if ( m_activeTextureHandle == 0 ) {
-            glEnable( GL_TEXTURE_2D );
-            glActiveTexture( GL_TEXTURE0 );
-            glBindTexture( GL_TEXTURE_2D, m_textureHandles[0] );
-    
-            glUniform1i( glGetAttribLocation( m_activeShader, "textureID" ), 0 );
-            return;
-        }
-
-        glEnable( GL_TEXTURE_2D );
-        glActiveTexture( GL_TEXTURE0 );
-        glBindTexture( GL_TEXTURE_2D, m_textureHandles[1] );
-
-        glUniform1i( glGetAttribLocation( m_activeShader, "textureID" ), 1 );
-
+      glEnable(GL_TEXTURE_CUBE_MAP);
+      glActiveTexture(GL_TEXTURE0);
+      glBindTexture(GL_TEXTURE_CUBE_MAP, m_textureHandles[0]);
+      glUniform1i(glGetUniformLocation(m_activeShader, "cubeMap"), 0);
     }
 
 
@@ -115,7 +82,7 @@ namespace dgfx {
         std::cout << "A cube was picked, triangle " << triangleIdx << std::endl; 
         
         // Create a burst at our location
-        m_scene->addEntity(std::unique_ptr<Entity>(new Burst(m_x, m_y, m_z)));
+        /* m_scene->addEntity(std::unique_ptr<Entity>(new Burst(m_x, m_y, m_z))); */
         // kys
         m_alive = false;
     }
