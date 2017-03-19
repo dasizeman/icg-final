@@ -24,7 +24,7 @@ namespace dgfx {
 
         // Create the lights
         m_lights.push_back( Light(DIRECTIONAL, 
-                    vec4(-1.0,0.0,0.0,0.0), 
+                    vec4(0.0,1.0,0.0,0.0), 
                     vec4( 0.2, 0.2, 0.2, 1.0 ),
                     vec4( 1.0, 1.0, 1.0, 1.0 ),
                     vec4( 1.0, 1.0, 1.0, 1.0 )));
@@ -45,45 +45,38 @@ namespace dgfx {
 
      void DiceRollerScene::keyboardHandler(unsigned char key, int x, int y) {
          Scene::keyboardHandler( key, x, y );
-         const float ROTATION_SPEED = 0.1;
+         const float MOVE_SPEED = 0.25;
 
          if ( key == ' ' ) {
-             m_lights[1].m_toggle = !m_lights[1].m_toggle;
          }
 
          switch ( key ) {
-             case 'a':
+             case 'l':
                 m_lights[0].m_toggle = !m_lights[0].m_toggle;
                 break;
-             case 'r':
-                 globalAnimationToggle();
-                 break;
-
-             case 'p':
-                m_activeCamera->toggleProjectionMode();
-             break;
-
-             case 'X':
-                m_activeCamera->pitch( ROTATION_SPEED );
-             break;
-             case 'x':
-                m_activeCamera->pitch( -ROTATION_SPEED );
+            case 'f':
+                 m_lights[1].m_toggle = !m_lights[1].m_toggle;
+            break;
+            case 'w':
+                m_activeCamera->moveAlongAt( MOVE_SPEED );
             break;
 
-             case 'Z':
-                m_activeCamera->roll( ROTATION_SPEED );
-             break;
-             case 'z':
-                m_activeCamera->roll( -ROTATION_SPEED );
-             break;
+            case 's':
+                m_activeCamera->moveAlongAt( -MOVE_SPEED );
+            break;
 
-             case 'C':
-                m_activeCamera->yaw( ROTATION_SPEED );
-             break;
+            case 'a':
+                m_activeCamera->moveAlongU( -MOVE_SPEED );
+            break;
 
-             case 'c':
-                m_activeCamera->yaw( -ROTATION_SPEED );
-             break;
+            case 'd':
+                m_activeCamera->moveAlongU( MOVE_SPEED );
+            break;
+
+            case ' ':
+                // Pick at the middle of the screen
+                pickTriangle( m_screenWidth / 2, m_screenHeight / 2);
+            break;
 
          }
 
@@ -91,36 +84,30 @@ namespace dgfx {
 
 
      void DiceRollerScene::clickHandler(GLint button, GLint state, GLint x, GLint y){
-         if (! (m_activeCamera->m_id == 0 &&
-                button == GLUT_LEFT_BUTTON &&
-                state == GLUT_DOWN ))
-             return;
-
-         pickTriangle( x, y );
      }
      
      void DiceRollerScene::specialKeyHandler(int key, int x, int y) {
          Scene::specialKeyHandler( key, x, y );
-         const float MOVE_SPEED = 0.25;
+         const float ROTATION_SPEED = 0.1;
 
          if (m_activeCamera->m_id != 0 )
              return;
 
          switch (key) {
             case GLUT_KEY_UP:
-                m_activeCamera->moveAlongAt( MOVE_SPEED );
+                m_activeCamera->pitch( -ROTATION_SPEED );
             break;
 
             case GLUT_KEY_DOWN:
-                m_activeCamera->moveAlongAt( -MOVE_SPEED );
+                m_activeCamera->pitch( ROTATION_SPEED );
             break;
 
             case GLUT_KEY_LEFT:
-                m_activeCamera->moveAlongU( -MOVE_SPEED );
+                m_activeCamera->yaw( ROTATION_SPEED );
             break;
 
             case GLUT_KEY_RIGHT:
-                m_activeCamera->moveAlongU( MOVE_SPEED );
+                m_activeCamera->yaw( -ROTATION_SPEED );
             break;
          }
 
@@ -169,7 +156,10 @@ namespace dgfx {
 
      void DiceRollerScene::timerCallback( int value ) {
 
-         m_lights[0].m_position = RotateZ(0.25) * m_lights[0].m_position;
+         // Compensate for rolling
+         while (fabs(m_activeCamera->m_v.x) > 0.01 || m_activeCamera->m_v.y < 0 )
+             m_activeCamera->roll(0.01);
+
          m_lights[1].m_position = m_activeCamera->m_eye;
          Scene::timerCallback( value );
 
@@ -183,6 +173,8 @@ namespace dgfx {
      void DiceRollerScene::pickTriangle( uint16_t x, uint16_t y ) {
          float xFloat = static_cast<float>(x);
          float yFloat = static_cast<float>(y);
+
+
 
          // First we calculate where the clicked point is on the front of the
          // canonical view volume

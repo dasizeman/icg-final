@@ -11,8 +11,11 @@ namespace dgfx {
                     m_v( up ),
                     m_width(500),
                     m_height(500){
-        toggleProjectionMode();
-        m_u = cross(m_v,m_n);
+        m_v.w = 0;
+        m_v = normalize(m_v);
+        m_n.w = 0;
+        m_n = normalize(m_n);
+        m_u = normalize(cross(m_v,m_n));
         m_u.w = 0;
         updateViewMatrix();
     }
@@ -21,7 +24,7 @@ namespace dgfx {
         // TODO maybe don't hardcode this
         //m_usePerspectiveProjection = !m_usePerspectiveProjection;
         //iif ( m_usePerspectiveProjection )
-            usePerspectiveProjection( 65, static_cast<float>(m_width)/m_height, 1, 100 );
+            usePerspectiveProjection( 65, m_aspect, 1, 100 );
         //else
            // useOrthographicProjection( -1, 1, -1, 1, 1, 3 );
     
@@ -43,9 +46,10 @@ namespace dgfx {
         m_viewMatrix = LookAt( m_eye, m_eye- m_n, m_v );
     }
 
-    void Camera::changeProjectionAspectRatio(int width, int height) {
+    void Camera::changeProjectionAspectRatio(double width, double height) {
         m_width = width;
         m_height = height;
+        m_aspect = static_cast<double>(m_width) / static_cast<double>(m_height);
         toggleProjectionMode(); // Hack, to update projection matrix
     }
 
@@ -62,26 +66,26 @@ namespace dgfx {
     }
     void Camera::pitch( float amount ) {
         vec4 old_v = m_v;
-        m_v = cos(amount)*old_v - sin(amount)*m_n;
-        m_n = sin(amount)*old_v + cos(amount)*m_n;
-        m_u = cross(m_v,m_n) ;
+        m_v = normalize(cos(amount)*old_v - sin(amount)*m_n);
+        m_n = normalize(sin(amount)*old_v + cos(amount)*m_n);
+        m_u = normalize(cross(m_v,m_n)) ;
         m_u.w = 0;
         updateViewMatrix();
     }
     void Camera::roll( float amount ) {
         vec4 old_v = m_v;
-        m_v = cos(amount)*old_v - sin(amount)*m_u;
-        m_u = sin(amount)*old_v + cos(amount)*m_u;
-        m_n = cross(m_u, m_v);
+        m_v = normalize(cos(amount)*old_v - sin(amount)*m_u);
+        m_u = normalize(sin(amount)*old_v + cos(amount)*m_u);
+        m_n = normalize(cross(m_u, m_v));
         m_n.w = 0;
         updateViewMatrix();
 
     }
     void Camera::yaw( float amount ) {
         vec4 old_u = m_u;
-        m_u = cos(amount)*old_u - sin(amount)*m_n;
-        m_n = sin(amount)*old_u + cos(amount)*m_n;
-        m_v = cross(m_n, m_u);
+        m_u = normalize(cos(amount)*old_u - sin(amount)*m_n);
+        m_n = normalize(sin(amount)*old_u + cos(amount)*m_n);
+        m_v = normalize(cross(m_n, m_u));
         m_v.w = 0;
         updateViewMatrix();
     }
