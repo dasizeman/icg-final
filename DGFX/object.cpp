@@ -12,9 +12,9 @@ namespace dgfx {
             m_yRot = 0;
             m_zRot = 0;
             
-            m_ambient = vec4( 1.0, 1.0, 0.0, 1.0 );
-            m_diffuse = vec4( 1.0, 0.8, 0.0, 1.0 );
-            m_specular = vec4( 1.0, 1.0, 0.0, 1.0 );
+            m_ambient = vec4( 1.0, 1.0, 1.0, 1.0 );
+            m_diffuse = vec4( 1.0, 1.0, 1.0, 1.0 );
+            m_specular = vec4( 1.0, 1.0, 1.0, 1.0 );
             m_shininess = 5.0;
     }
 
