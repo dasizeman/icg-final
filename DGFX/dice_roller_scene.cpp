@@ -4,7 +4,7 @@
 #include "object.hpp"
 #include "daveutils.hpp"
 namespace dgfx {
-     const std::string DiceRollerScene::FRAGMENT_TEXTURE_SHADER_NAME = "phong_sun_spot_frag_tex";
+     const std::string DiceRollerScene::FRAGMENT_TEXTURE_SHADER_NAME = "cube_tex";
      
      DiceRollerScene::DiceRollerScene(std::string windowName, int width, int height) : 
          Scene(windowName, width, height) {

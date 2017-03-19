@@ -21,7 +21,7 @@ class Object : public Entity {
         GLuint m_activeShader;
 
         // Read PPM image into texture
-        unsigned char * ppmRead(char* filename, int* width, int* height);
+        unsigned char * ppmRead(const char* filename, int* width, int* height);
 
 
         // Called by the scene to draw the object

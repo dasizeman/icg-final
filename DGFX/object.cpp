@@ -19,7 +19,7 @@ namespace dgfx {
     }
 
    
-    unsigned char * Object::ppmRead(char* filename, int* width, int* height) {
+    unsigned char * Object::ppmRead(const char* filename, int* width, int* height) {
 	FILE* fp=NULL;
 	int i, w, h, d;
 	unsigned char* image;
@@ -114,8 +114,7 @@ namespace dgfx {
         GLuint vNormalLoc = glGetAttribLocation( m_activeShader, "vNormal" );
         glEnableVertexAttribArray( vNormalLoc );
         glVertexAttribPointer( vNormalLoc, 3, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0) );
-
-        // Do texture-related initialization
+        
         textureInit();
 
         // Generate the model matrix.  We also need to apply it to our in-memory
