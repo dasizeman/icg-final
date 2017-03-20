@@ -17,7 +17,8 @@ include_directories (${OPENGL_INCLUDE_DIRS}
                      ${GLEW_INCLUDE_DIRS}
 		     ${PROJECT_SOURCE_DIR}
 		     ${PROJECT_SOURCE_DIR}/DaveUtils
-		     ${PROJECT_SOURCE_DIR}/DGFX)
+		     ${PROJECT_SOURCE_DIR}/DGFX
+                     ${PROJECT_SOURCE_DIR}/include/glm)
 
 add_subdirectory (InitShader)
 add_subdirectory (DaveUtils)

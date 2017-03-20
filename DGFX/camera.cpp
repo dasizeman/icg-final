@@ -1,4 +1,5 @@
 #include "camera.hpp"
+#include "glm/gtx/rotate_vector.hpp"
 
 namespace dgfx {
     Camera::Camera( uint16_t id,
@@ -88,6 +89,37 @@ namespace dgfx {
         m_v = normalize(cross(m_n, m_u));
         m_v.w = 0;
         updateViewMatrix();
+    }
+
+    void Camera::rotateInX( float amount ) {
+        glm::vec3 v(m_v.x, m_v.y, m_v.z);
+        glm::vec3 n(m_n.x, m_n.y, m_n.z);
+        glm::vec3 u(m_u.x, m_u.y, m_u.z);
+
+        // We want to rotate n and u around v
+        n = glm::rotate(n, amount, v);
+        u = glm::rotate(u, amount, v);
+
+
+        m_u = normalize(vec4(u.x, u.y, u.z, 0));
+        m_n = normalize(vec4(n.x, n.y, n.z, 0));
+        updateViewMatrix();
+    }
+
+    void Camera::rotateInY( float amount ){
+        glm::vec3 v(m_v.x, m_v.y, m_v.z);
+        glm::vec3 n(m_n.x, m_n.y, m_n.z);
+        glm::vec3 u(m_u.x, m_u.y, m_u.z);
+
+        // We want to rotate n and v around u
+        n = glm::rotate(n, amount, u);
+        u = glm::rotate(v, amount, u);
+
+
+        m_v = normalize(vec4(v.x, v.y, v.z, 0));
+        m_n = normalize(vec4(n.x, n.y, n.z, 0));
+        updateViewMatrix();
+    
     }
 
 

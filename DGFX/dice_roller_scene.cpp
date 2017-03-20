@@ -13,7 +13,7 @@ namespace dgfx {
         // Create cameras
         m_cameras.push_back( std::shared_ptr<Camera> ( new Camera (
                     0,
-                    vec4( 0, 1, 0, 1 ),
+                    vec4( 0, 1.0, 0, 1 ),
                     vec4( 0, 0, -1, 0 ),
                     vec4( 0, 1, 0, 0 ) ) ) );
 
@@ -25,7 +25,7 @@ namespace dgfx {
         // Create the lights
         m_lights.push_back( Light(DIRECTIONAL, 
                     vec4(0.0,1.0,0.0,0.0), 
-                    vec4( 0.2, 0.2, 0.2, 1.0 ),
+                    vec4( 1.0, 1.0, 1.0, 1.0 ),
                     vec4( 1.0, 1.0, 1.0, 1.0 ),
                     vec4( 1.0, 1.0, 1.0, 1.0 )));
 
@@ -95,19 +95,19 @@ namespace dgfx {
 
          switch (key) {
             case GLUT_KEY_UP:
-                m_activeCamera->pitch( -ROTATION_SPEED );
+                m_activeCamera->rotateInY( ROTATION_SPEED );
             break;
 
             case GLUT_KEY_DOWN:
-                m_activeCamera->pitch( ROTATION_SPEED );
+                m_activeCamera->rotateInY( -ROTATION_SPEED );
             break;
 
             case GLUT_KEY_LEFT:
-                m_activeCamera->yaw( ROTATION_SPEED );
+                m_activeCamera->rotateInX( ROTATION_SPEED );
             break;
 
             case GLUT_KEY_RIGHT:
-                m_activeCamera->yaw( -ROTATION_SPEED );
+                m_activeCamera->rotateInX( -ROTATION_SPEED );
             break;
          }
 
@@ -156,9 +156,6 @@ namespace dgfx {
 
      void DiceRollerScene::timerCallback( int value ) {
 
-         // Compensate for rolling
-         while (fabs(m_activeCamera->m_v.x) > 0.01 || m_activeCamera->m_v.y < 0 )
-             m_activeCamera->roll(0.01);
 
          m_lights[1].m_position = m_activeCamera->m_eye;
          Scene::timerCallback( value );

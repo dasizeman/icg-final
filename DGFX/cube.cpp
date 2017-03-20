@@ -2,9 +2,12 @@
 #include "burst.hpp"
 #include "dice_roller_scene.hpp"
 namespace dgfx {
-    Cube::Cube(float x, float y, float z, float xrot, float yrot, float zrot, std::vector<std::string> text) : Object(x,y,z, xrot, yrot, zrot){
-      textures = text;
+    Cube::Cube(float x, float y, float z, float xrot, float yrot, float zrot, float scaleFactor) 
+        : Object(x,y,z, xrot, yrot, zrot){
+      m_scale = scaleFactor;
     }
+
+
 
     void Cube::generateGeometry() {
   	vec4 vertices[] = {vec4(-0.5,-0.5,0.5,1.0),vec4(-0.5,0.5,0.5,1.0),vec4(0.5,0.5,0.5,1.0),vec4(0.5,-0.5,0.5,1.0), vec4(-0.5,-0.5,-0.5,1.0),vec4(-0.5,0.5,-0.5,1.0),vec4(0.5,0.5,-0.5,1.0),vec4(0.5,-0.5,-0.5,1.0)};
@@ -15,6 +18,10 @@ namespace dgfx {
          makeQuad(6,5,1,2, vertices);  //top
          makeQuad(4,5,6,7, vertices);  //back
          makeQuad(5,4,0,1, vertices);  //left
+
+         // Scale each vertex
+         for (int i = 0; i < m_vertices.size(); i++)
+             m_vertices[i] = Scale(m_scale, m_scale, m_scale) * m_vertices[i];
 
     }
 
@@ -33,6 +40,9 @@ namespace dgfx {
     }
 
     void Cube::textureInit() {
+        // Get our texture paths from the base class
+        m_texturePaths = getTexturePaths();
+
         m_textureHandles.resize(1);
         glGenTextures( 1, &m_textureHandles[0] );
         int width = 512, height = 512;
@@ -45,17 +55,17 @@ namespace dgfx {
         glTexParameterf(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 
         GLubyte *front, *back, *left, *right, *top, *bottom;
-        top = ppmRead(textures[0].c_str(), &width, &height);
+        top = ppmRead(m_texturePaths[0].c_str(), &width, &height);
         glTexImage2D( GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0 , GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, top);
-        bottom = ppmRead(textures[1].c_str(), &width, &height);
+        bottom = ppmRead(m_texturePaths[1].c_str(), &width, &height);
         glTexImage2D( GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0 , GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, bottom);
-        right = ppmRead(textures[2].c_str(), &width, &height);
+        right = ppmRead(m_texturePaths[2].c_str(), &width, &height);
         glTexImage2D( GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0 , GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, right);
-        left = ppmRead(textures[3].c_str(), &width, &height);
+        left = ppmRead(m_texturePaths[3].c_str(), &width, &height);
         glTexImage2D( GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0 , GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, left);
-        front = ppmRead(textures[4].c_str(), &width, &height);
+        front = ppmRead(m_texturePaths[4].c_str(), &width, &height);
         glTexImage2D( GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0 , GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, front);
-        back = ppmRead(textures[5].c_str(), &width, &height);
+        back = ppmRead(m_texturePaths[5].c_str(), &width, &height);
         glTexImage2D( GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0 , GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, back);
 
         delete[] front;

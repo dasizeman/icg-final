@@ -31,6 +31,9 @@ public:
     void roll( float amount );
     void yaw( float amount );
 
+    void rotateInY( float amount );
+    void rotateInX( float amount );
+
     mat4 viewInverse();
 };
 
