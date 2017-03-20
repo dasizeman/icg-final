@@ -19,9 +19,9 @@ namespace dgfx {
     class Scene {
     public:
         static std::shared_ptr<Scene> m_instance;
+        std::shared_ptr<Camera> m_activeCamera;
     protected:
         std::vector<std::shared_ptr<Camera>> m_cameras;
-        std::shared_ptr<Camera> m_activeCamera;
         std::map<std::string, GLuint> m_shaderMap;
         std::vector<std::unique_ptr<Entity>> m_entities;
         std::vector<Light> m_lights;
