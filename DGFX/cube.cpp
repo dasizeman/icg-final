@@ -47,7 +47,7 @@ namespace dgfx {
         glGenTextures( 1, &m_textureHandles[0] );
         int width = 512, height = 512;
 
-        glBindTexture( GL_TEXTURE_2D, m_textureHandles[0] );
+        glBindTexture( GL_TEXTURE_CUBE_MAP, m_textureHandles[0] );
         glTexParameterf(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         glTexParameterf(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameterf(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -88,13 +88,5 @@ namespace dgfx {
         m_activeShader = shaderMap[ DiceRollerScene::FRAGMENT_TEXTURE_SHADER_NAME ];
     }
     
-    void Cube::wasPicked( uint16_t triangleIdx ) {
-        std::cout << "A cube was picked, triangle " << triangleIdx << std::endl; 
-        
-        // Create a burst at our location
-        m_scene->addEntity(std::unique_ptr<Entity>(new Burst(m_x, m_y, m_z)));
-        // kys
-        m_alive = false;
-    }
 
 }

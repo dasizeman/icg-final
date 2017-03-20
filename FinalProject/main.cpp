@@ -22,9 +22,9 @@ int main(int argc, char **argv) {
     // init and callback hooking inside the scene class
     Scene::m_instance = scene;
 
-    scene->addEntity(std::unique_ptr<Entity>(new Room(0, 7.5, 0, 0, 0, 0)));
     
     scene->addEntity(std::unique_ptr<Entity>(new Ghost(-2, 0.5, -4, 0, 0, 0)));
+    scene->addEntity(std::unique_ptr<Entity>(new Room(0, 7.5, 0, 0, 0, 0)));
 
 
     scene->start();

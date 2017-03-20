@@ -5,7 +5,11 @@
 namespace dgfx {
   class Ghost : public Cube {
     public:
-      Ghost(float x, float y, float z, float xrot, float yrot, float zrot, std::vector<std::string> text = std::vector<std::string>(0));
+      Ghost(float x, float y, float z, float xrot, float yrot, float zrot);
+
+    protected:
+        std::vector<std::string> getTexturePaths();
+        void wasPicked( uint16_t triangleIdx );
   };
 }
 #endif
