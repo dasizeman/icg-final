@@ -92,7 +92,7 @@ namespace dgfx {
         std::cout << "A cube was picked, triangle " << triangleIdx << std::endl; 
         
         // Create a burst at our location
-        /* m_scene->addEntity(std::unique_ptr<Entity>(new Burst(m_x, m_y, m_z))); */
+        m_scene->addEntity(std::unique_ptr<Entity>(new Burst(m_x, m_y, m_z)));
         // kys
         m_alive = false;
     }
