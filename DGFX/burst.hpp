@@ -1,3 +1,6 @@
+#ifndef __BURST_H__
+#define __BURST_H__
+
 #include "object.hpp"
 namespace dgfx {
 class Burst : public Object {
@@ -21,3 +24,4 @@ class Burst : public Object {
         void initializeParticles();
 };
 }
+#endif
