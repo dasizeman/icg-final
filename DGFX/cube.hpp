@@ -1,6 +1,7 @@
 #ifndef __CUBE_H__
 #define __CUBE_H__
 #include "object.hpp"
+#include "burst.hpp"
 
 namespace dgfx {
 class Cube : public Object {

@@ -88,5 +88,12 @@ namespace dgfx {
         m_activeShader = shaderMap[ DiceRollerScene::FRAGMENT_TEXTURE_SHADER_NAME ];
     }
     
-
+    void Cube::wasPicked( uint16_t triangleIdx ) {
+        std::cout << "A cube was picked, triangle " << triangleIdx << std::endl; 
+        
+        // Create a burst at our location
+        m_scene->addEntity(std::unique_ptr<Entity>(new Burst(m_x, m_y, m_z)));
+        // kys
+        m_alive = false;
+    }
 }

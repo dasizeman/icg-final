@@ -9,7 +9,6 @@ public:
 protected:
     void wasPicked( uint16_t triangleIdx );
     std::vector<std::string> getTexturePaths();
-
 };
 }
 #endif
