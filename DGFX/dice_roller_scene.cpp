@@ -13,8 +13,8 @@ namespace dgfx {
         // Create cameras
         m_cameras.push_back( std::shared_ptr<Camera> ( new Camera (
                     0,
-                    vec4( 0, 5.0, 7.0, 1 ),
-                    vec4( 0, -0.50, -1, 0 ),
+                    vec4( 0, 1.0, 7.0, 1 ),
+                    vec4( 0, 0, -1, 0 ),
                     vec4( 0, 1, 0, 0 ) ) ) );
 
         m_activeCamera = m_cameras[0];
@@ -46,9 +46,19 @@ namespace dgfx {
      void DiceRollerScene::keyboardHandler(unsigned char key, int x, int y) {
          Scene::keyboardHandler( key, x, y );
          const float MOVE_SPEED = 0.25;
+         const float ROOM_BOUNDS = 7.5;
 
-         if ( key == ' ' ) {
-         }
+         // Keep the player in bounds
+         vec4 pos = m_activeCamera->m_eye;
+         
+         pos.x = std::max(-ROOM_BOUNDS, pos.x);
+         pos.x = std::min(ROOM_BOUNDS, pos.x);
+         pos.z = std::max(-ROOM_BOUNDS, pos.z);
+         pos.z = std::min(ROOM_BOUNDS, pos.z);
+
+         m_activeCamera->m_eye = pos;
+
+
 
          switch ( key ) {
              case 'l':
@@ -58,19 +68,19 @@ namespace dgfx {
                  m_lights[1].m_toggle = !m_lights[1].m_toggle;
             break;
             case 'w':
-                m_activeCamera->moveAlongAt( MOVE_SPEED );
+                m_activeCamera->moveForward( MOVE_SPEED );
             break;
 
             case 's':
-                m_activeCamera->moveAlongAt( -MOVE_SPEED );
+                m_activeCamera->moveForward( -MOVE_SPEED );
             break;
 
             case 'a':
-                m_activeCamera->moveAlongU( -MOVE_SPEED );
+                m_activeCamera->moveStrafe( -MOVE_SPEED );
             break;
 
             case 'd':
-                m_activeCamera->moveAlongU( MOVE_SPEED );
+                m_activeCamera->moveStrafe( MOVE_SPEED );
             break;
 
             case ' ':

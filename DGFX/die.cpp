@@ -2,7 +2,7 @@
 #include "daveutils.hpp"
 namespace dgfx {
     Die::Die (float x, float y, float z, float xrot, float yrot, float zrot) :
-        Cube (x,y,z,xrot,yrot,zrot, 1.0){
+        Cube (x,y,z,xrot,yrot,zrot, 0.5){
         
         setUpSide(1);
     }

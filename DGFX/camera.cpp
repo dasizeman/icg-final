@@ -18,6 +18,9 @@ namespace dgfx {
         m_n = normalize(m_n);
         m_u = normalize(cross(m_v,m_n));
         m_u.w = 0;
+
+        m_moveForward = glm::vec3(0,0,-1);
+        m_moveStrafe = glm::vec3(1,0,0);
         updateViewMatrix();
     }
 
@@ -65,6 +68,25 @@ namespace dgfx {
         updateViewMatrix();
 
     }
+
+    void Camera::moveForward( float amount ) {
+        vec4 direction ( m_moveForward.x,
+                        m_moveForward.y,
+                        m_moveForward.z,
+                        0 );
+        m_eye += amount * direction;
+        updateViewMatrix();
+    }
+
+    void Camera::moveStrafe( float amount ) {
+        vec4 direction ( m_moveStrafe.x,
+                        m_moveStrafe.y,
+                        m_moveStrafe.z,
+                        0 );
+        m_eye += amount * direction;
+        updateViewMatrix();
+
+    }
     void Camera::pitch( float amount ) {
         vec4 old_v = m_v;
         m_v = normalize(cos(amount)*old_v - sin(amount)*m_n);
@@ -92,13 +114,26 @@ namespace dgfx {
     }
 
     void Camera::rotateInX( float amount ) {
-        glm::vec3 v(m_v.x, m_v.y, m_v.z);
+        glm::vec3 y(0, 1, 0);
         glm::vec3 n(m_n.x, m_n.y, m_n.z);
         glm::vec3 u(m_u.x, m_u.y, m_u.z);
+        glm::vec3 v(m_v.x, m_v.y, m_v.z);
 
-        // We want to rotate n and u around v
-        n = glm::rotate(n, amount, v);
-        u = glm::rotate(u, amount, v);
+        // Reset to eye-line before turning left or right
+        m_u = normalize(vec4(m_moveStrafe.x, m_moveStrafe.y, m_moveStrafe.z,0));
+        m_n = -normalize(vec4(m_moveForward.x, m_moveForward.y, m_moveForward.z,0));
+        m_v = vec4(0,1,0,0);
+
+        // We want to rotate n, u, around v
+        n = glm::rotate(n, amount, y);
+        u = glm::rotate(u, amount, y);
+
+        // And move, strafe around y
+        m_moveForward = glm::normalize(
+                glm::rotate(m_moveForward, amount, y));
+        m_moveStrafe = glm::normalize(
+                glm::rotate(m_moveStrafe, amount, y));
+
 
 
         m_u = normalize(vec4(u.x, u.y, u.z, 0));
@@ -109,11 +144,10 @@ namespace dgfx {
     void Camera::rotateInY( float amount ){
         glm::vec3 v(m_v.x, m_v.y, m_v.z);
         glm::vec3 n(m_n.x, m_n.y, m_n.z);
-        glm::vec3 u(m_u.x, m_u.y, m_u.z);
 
-        // We want to rotate n and v around u
-        n = glm::rotate(n, amount, u);
-        u = glm::rotate(v, amount, u);
+        // We want to rotate n, u, around strafe
+        n = glm::rotate(n, amount, m_moveStrafe);
+        v = glm::rotate(v, amount, m_moveStrafe);
 
 
         m_v = normalize(vec4(v.x, v.y, v.z, 0));

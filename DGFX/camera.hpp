@@ -1,6 +1,7 @@
 #ifndef __DGFX_CAMERA_H__
 #define __DGFX_CAMERA_H__
 #include "Angel.h"
+#include "glm/glm.hpp"
 namespace dgfx {
 class Camera {
 
@@ -11,6 +12,7 @@ private:
 
 public:
     vec4 m_u, m_v, m_n;
+    glm::vec3 m_moveForward, m_moveStrafe;
     Camera(uint16_t id, vec4 eye, vec4 at, vec4 up);
     vec4 m_eye;
     uint16_t m_id;
@@ -27,6 +29,8 @@ public:
 
     void moveAlongAt( float amount );
     void moveAlongU( float amount );
+    void moveForward( float amount );
+    void moveStrafe( float amount );
     void pitch( float amount );
     void roll( float amount );
     void yaw( float amount );
