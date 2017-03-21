@@ -158,24 +158,6 @@ namespace dgfx {
     }
     // Called by the scene to update GL state based on internal state
     void Object::update(std::map<std::string, GLuint>& shaderMap) { 
-        if (!m_doAnimation)
-            return;
-
-        if ( m_yRot >= 360)
-            m_yRot = 0;
-        m_yRot += 1;
-
-        // Generate the model matrix.  We also need to apply it to our in-memory
-        // vertex data for the sake of collision detection
-        // TODO WARNING!! This is not the right way to do this, as if we ever
-        // copy the vertex data to the gpu this transformation will stick!!
-        mat4 modelMatrix = Translate(m_x, m_y, m_z ) * 
-                           RotateY( 1 ) *
-                           Translate( -m_x, -m_y, -m_z );
-        for ( int i = 0; i < m_vertices.size(); i++ ) {
-            vec4 oldVertex = m_vertices[ i ];
-            m_vertices[ i ] = modelMatrix * oldVertex;
-        }
     }
 
     void Object::calculateNormals() {

@@ -8,6 +8,7 @@
 #include "ghost.hpp"
 #include "burst.hpp"
 #include "room.hpp"
+#include "die.hpp"
 
 #include "Angel.h"
 using namespace dgfx;
@@ -24,6 +25,7 @@ int main(int argc, char **argv) {
 
     
     scene->addEntity(std::unique_ptr<Entity>(new Ghost(-2, 0.5, -4, 0, 0, 0)));
+    scene->addEntity(std::unique_ptr<Entity>(new Die(0, 0.85, 2, 0, 0, 0)));
     scene->addEntity(std::unique_ptr<Entity>(new Room(0, 7.5, 0, 0, 0, 0)));
 
 

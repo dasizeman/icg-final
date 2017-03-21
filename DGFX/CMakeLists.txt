@@ -9,4 +9,5 @@ add_library (DGFX
             light.cpp
             ghost.cpp
             burst.cpp
-            room.cpp)
+            room.cpp
+            die.cpp)
