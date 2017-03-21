@@ -24,7 +24,8 @@ int main(int argc, char **argv) {
     Scene::m_instance = scene;
 
     
-    scene->addEntity(std::unique_ptr<Entity>(new Ghost(-2, 0.5, -4, 0, 0, 0)));
+    for (int x = -4; x < 5; x++)
+        scene->addEntity(std::unique_ptr<Entity>(new Ghost(x, 0.5, -4, 0, 0, 0)));
     scene->addEntity(std::unique_ptr<Entity>(new Die(0, 0.35, 2, 0, 0, 0)));
     scene->addEntity(std::unique_ptr<Entity>(new Room(0, 7.5, 0, 0, 0, 0)));
 

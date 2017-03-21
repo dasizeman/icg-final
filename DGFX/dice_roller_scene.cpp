@@ -46,7 +46,7 @@ namespace dgfx {
      void DiceRollerScene::keyboardHandler(unsigned char key, int x, int y) {
          Scene::keyboardHandler( key, x, y );
          const float MOVE_SPEED = 0.25;
-         const float ROOM_BOUNDS = 7.5;
+         const float ROOM_BOUNDS = 6.0;
 
          // Keep the player in bounds
          vec4 pos = m_activeCamera->m_eye;

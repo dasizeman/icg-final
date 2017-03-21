@@ -1,10 +1,11 @@
 #include "burst.hpp"
 #include "dice_roller_scene.hpp"
+#include "daveutils.hpp"
 namespace dgfx {
     Burst::Burst(float x, float y, float z) : Object(x,y,z, 0, 0, 0){
         initializeParticles();
         m_gravityPull.w = 1.0;
-        m_aliveTicks = 150;
+        m_aliveTicks = 100;
     }
 
     void Burst::generateGeometry() {
@@ -110,36 +111,39 @@ namespace dgfx {
     }
 
     void Burst::textureInit() {
-        glBindBuffer( GL_ARRAY_BUFFER , m_vertexBuffers[2] );
-        glBufferData( GL_ARRAY_BUFFER, m_textureCoords.size() * sizeof(vec2), &m_textureCoords[0], GL_STATIC_DRAW );
-        GLuint vTexCoordLoc = glGetAttribLocation( m_activeShader, "vTexCoord" );
-        glEnableVertexAttribArray( vTexCoordLoc );
-        glVertexAttribPointer( vTexCoordLoc, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0) );
+
+        GLubyte color[3];
+        for (int i = 0; i < 3; i++)
+            color[i] = static_cast<GLubyte>(daveutils::randomFloat(0,256));
+        GLubyte *image = color;
 
         m_textureHandles.resize(1);
         glGenTextures( 1, &m_textureHandles[0] );
         int width = 1, height = 1;
 
-        GLubyte redPixel[] = {255,0,0};
-        GLubyte *image = redPixel;
-        glBindTexture( GL_TEXTURE_2D, m_textureHandles[0] );
-        glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image );
-        glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
-        glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
-        glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
-        glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
+        glBindTexture( GL_TEXTURE_CUBE_MAP, m_textureHandles[0] );
+        glTexParameterf(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameterf(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameterf(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameterf(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        glTexParameterf(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_REPEAT);
+
+        glTexImage2D( GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0 , GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+        glTexImage2D( GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0 , GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+        glTexImage2D( GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0 , GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+        glTexImage2D( GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0 , GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+        glTexImage2D( GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0 , GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+        glTexImage2D( GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0 , GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
 
 
     }
 
     void Burst::textureDraw() {
 
-        glEnable( GL_TEXTURE_2D );
-        glActiveTexture( GL_TEXTURE0 );
-        glBindTexture( GL_TEXTURE_2D, m_textureHandles[0] );
-
-        glUniform1i( glGetAttribLocation( m_activeShader, "textureID" ), 0 );
-        return;
+      glEnable(GL_TEXTURE_CUBE_MAP);
+      glActiveTexture(GL_TEXTURE0);
+      glBindTexture(GL_TEXTURE_CUBE_MAP, m_textureHandles[0]);
+      glUniform1i(glGetUniformLocation(m_activeShader, "cubeMap"), 0);
 
     }
 
