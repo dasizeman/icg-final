@@ -9,6 +9,8 @@ class DiceRollerScene : public Scene {
           VERTEX_LIGHTING_SHADER_NAME, FRAGMENT_TEXTURE_SHADER_NAME;
 
     protected:
+         // The number of ghosts, for lighting purposes
+         int m_numGhosts = 9; 
          // Handlers/ callbacks
 	 void keyboardHandler(unsigned char key, int x, int y);
          void specialKeyHandler(int key, int x, int y);

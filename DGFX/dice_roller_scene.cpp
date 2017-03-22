@@ -13,7 +13,7 @@ namespace dgfx {
         // Create cameras
         m_cameras.push_back( std::shared_ptr<Camera> ( new Camera (
                     0,
-                    vec4( 0, 1.0, 7.0, 1 ),
+                    vec4( 0, 1.5, 7.0, 1 ),
                     vec4( 0, 0, -1, 0 ),
                     vec4( 0, 1, 0, 0 ) ) ) );
 
@@ -25,9 +25,9 @@ namespace dgfx {
         // Create the lights
         m_lights.push_back( Light(DIRECTIONAL, 
                     vec4(0.0,1.0,0.0,0.0), 
-                    vec4( 1.0, 1.0, 1.0, 1.0 ),
-                    vec4( 1.0, 1.0, 1.0, 1.0 ),
-                    vec4( 1.0, 1.0, 1.0, 1.0 )));
+                    vec4( 0.7, 0.7, 0.7, 1.0 ),
+                    vec4( 0.7, 0.7, 0.7, 1.0 ),
+                    vec4( 0.7, 0.7, 0.7, 1.0 )));
 
 
         m_lights.push_back( Light(SPOTLIGHT, 
@@ -167,6 +167,7 @@ namespace dgfx {
      void DiceRollerScene::timerCallback( int value ) {
 
 
+         m_lights[0].m_position = RotateZ(10.0) * m_lights[0].m_position;
          m_lights[1].m_position = m_activeCamera->m_eye;
          Scene::timerCallback( value );
 
