@@ -1,6 +1,7 @@
 #include "cube.hpp"
 #include "burst.hpp"
 #include "dice_roller_scene.hpp"
+
 namespace dgfx {
     Cube::Cube(float x, float y, float z, float xrot, float yrot, float zrot, float scaleFactor) 
         : Object(x,y,z, xrot, yrot, zrot){
