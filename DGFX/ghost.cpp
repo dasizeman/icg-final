@@ -6,8 +6,8 @@
 
 namespace dgfx {
     Ghost::Ghost(float x, float y, float z, float xrot, float yrot, float zrot) : Cube(x, y, z, xrot, yrot, zrot, 0.5){
-      rotation_speed = 0.5;
-      movement_speed = 0.1;
+      rotation_speed = 0.2;
+      movement_speed = 0.01;
     }
 
     void Ghost::rotateTowardCamera(){
@@ -69,16 +69,21 @@ namespace dgfx {
     }
 
     void Ghost::moveTowardCamera(){
-      vec4 eye = m_scene->m_activeCamera->m_eye;
-      vec3 glm_eye = normalize(vec3(eye.x, eye.y, eye.z) - vec3(m_x, m_y, m_z));
-      m_x += .01*glm_eye.x;
-      m_y += .01*glm_eye.y;
-      m_z += .01*glm_eye.z;
+      glm::vec3 norm = glm::vec3(m_normals[0].x, m_normals[0].y, m_normals[0].z);
+      float x_angle = (M_PI * m_xRot) / 180;
+      float y_angle = (M_PI * m_yRot) / 180;
+      norm = glm::rotateX(norm, x_angle);
+      norm = glm::rotateY(norm, y_angle);
+      std::cout << "x: " << norm.x << " y: " << norm.y << " z: " << norm.z << std::endl;
+      std::cout << "xrot: " << m_xRot << " yrot: " << m_yRot << std::endl << std::endl;
+      m_x += movement_speed*norm.x;
+      m_y += movement_speed*norm.y;
+      m_z += movement_speed*norm.z;
     }
 
     void Ghost::update(std::map<std::string, GLuint>& shaderMap){
         rotateTowardCamera();
-        /* moveTowardCamera(); */
+        moveTowardCamera();
     }
     
     void Ghost::draw(std::map<std::string, GLuint>& shaderMap) {
