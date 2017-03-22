@@ -10,22 +10,19 @@ namespace dgfx {
     void Ghost::rotateTowardCamera(){
       vec4 eye = m_scene->m_activeCamera->m_eye;
       vec3 norm = m_normals[0];
-      glm::vec3 glm_eye = glm::normalize(glm::vec3(eye.x - m_x, eye.y - m_y, eye.z - m_z));
-      glm::vec3 glm_norm = glm::normalize(glm::vec3(norm.x, norm.y, norm.z));
-
-      m_yRot = (glm::angle(glm::vec2(glm_eye.x, glm_eye.z), glm::vec2(glm_norm.x, glm_norm.z)) * 180) / M_PI;
-      if(glm_eye.x < 0)
-        m_yRot = 360 - m_yRot;
-
-      glm::vec3 hyp = glm::vec3(eye.x - m_x, eye.y - m_y, eye.z - m_z);
-      glm::vec3 adj = glm::vec3(hyp.x, 0, hyp.z);
-      float dotProduct = glm::dot(hyp, adj);
-      float hyp_dist = glm::length(hyp);
-      float adj_dist = glm::length(adj);
-      float angle = dotProduct/(adj_dist*hyp_dist);
-      angle = acos(angle);
-      angle = (angle*180)/M_PI;
-      m_xRot = -1*angle;
+      glm::vec3 hyp = glm::normalize(glm::vec3(eye.x-m_x, 0, eye.z-m_z));
+      glm::vec3 adj = glm::normalize(glm::vec3(norm.x, 0, norm.z));
+        
+      m_yRot = (glm::angle(hyp, adj) * 180)/ M_PI;
+      if(hyp.x < 0)
+        m_yRot = -1*m_yRot;
+      std::cout << "yrot" << m_yRot << std::endl;
+      std::cout << "x: " << hyp.x << " y: " << hyp.y << " z: " << hyp.z << glm::length(adj) << std::endl << std::endl;
+      
+      
+      adj = glm::normalize(glm::vec3(eye.x-m_x, eye.y-m_y, eye.z-m_z));
+      hyp = glm::normalize(glm::vec3(eye.x-m_x, 0, eye.z-m_z));
+      m_xRot = (glm::angle(hyp, adj) * 180)/ M_PI;
     }
 
     void Ghost::moveTowardCamera(){
@@ -38,7 +35,7 @@ namespace dgfx {
 
     void Ghost::update(std::map<std::string, GLuint>& shaderMap){
         rotateTowardCamera();
-        moveTowardCamera();
+        /* moveTowardCamera(); */
     }
     
     void Ghost::draw(std::map<std::string, GLuint>& shaderMap) {

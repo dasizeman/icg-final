@@ -14,7 +14,7 @@ namespace dgfx {
       void update(std::map<std::string, GLuint>& shaderMap);
       void draw(std::map<std::string, GLuint>& shaderMap);
     private:
-      float getAngle(vec2 delta, vec2 norm);
+      float getAngle(glm::vec3 adj, glm::vec3 hyp);
   };
 }
 #endif
