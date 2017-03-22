@@ -5,7 +5,10 @@
 #include "glm/gtc/type_ptr.hpp"
 
 namespace dgfx {
-    Ghost::Ghost(float x, float y, float z, float xrot, float yrot, float zrot) : Cube(x, y, z, xrot, yrot, zrot, 0.5){}
+    Ghost::Ghost(float x, float y, float z, float xrot, float yrot, float zrot) : Cube(x, y, z, xrot, yrot, zrot, 0.5){
+      rotation_speed = 0.5;
+      movement_speed = 0.1;
+    }
 
     void Ghost::rotateTowardCamera(){
       vec4 eye = m_scene->m_activeCamera->m_eye;
@@ -13,16 +16,56 @@ namespace dgfx {
       glm::vec3 hyp = glm::normalize(glm::vec3(eye.x-m_x, 0, eye.z-m_z));
       glm::vec3 adj = glm::normalize(glm::vec3(norm.x, 0, norm.z));
         
-      m_yRot = (glm::angle(hyp, adj) * 180)/ M_PI;
+      //get angle
+      float y_angle = (glm::angle(hyp, adj) * 180)/ M_PI;
       if(hyp.x < 0)
-        m_yRot = -1*m_yRot;
-      std::cout << "yrot" << m_yRot << std::endl;
-      std::cout << "x: " << hyp.x << " y: " << hyp.y << " z: " << hyp.z << glm::length(adj) << std::endl << std::endl;
+        y_angle = 360 - y_angle;
       
+      hyp = glm::normalize(glm::vec3(eye.x-m_x, eye.y-m_y, eye.z-m_z));
+      adj = glm::normalize(glm::vec3(eye.x-m_x, 0, eye.z-m_z));
+      float x_angle = (glm::angle(hyp, adj) * 180)/ M_PI;
       
-      adj = glm::normalize(glm::vec3(eye.x-m_x, eye.y-m_y, eye.z-m_z));
-      hyp = glm::normalize(glm::vec3(eye.x-m_x, 0, eye.z-m_z));
-      m_xRot = (glm::angle(hyp, adj) * 180)/ M_PI;
+      if(hyp.y > 0)
+        x_angle = 360 - x_angle;
+      
+      //slow turning
+      float ydiff = m_yRot - y_angle;
+
+      if(fabs(ydiff) > rotation_speed){
+        if(fabs(ydiff) > 180){
+          ydiff = ydiff - (180*(ydiff/fabs(ydiff)));
+          m_yRot += rotation_speed*ydiff/fabs(ydiff);
+        }
+        else{
+          m_yRot -= rotation_speed*ydiff/fabs(ydiff);
+        }
+        if(m_yRot > 360)
+          m_yRot -= 360;
+        else if(m_yRot < 0)
+          m_yRot += 360;
+      }
+      else{
+        m_yRot = y_angle;
+      }
+
+      float xdiff = m_xRot - x_angle;
+
+      if(fabs(xdiff) > rotation_speed){
+        if(fabs(xdiff) > 180){
+          ydiff = xdiff - (180*(xdiff/fabs(xdiff)));
+          m_yRot += rotation_speed*ydiff/fabs(xdiff);
+        }
+        else{
+          m_xRot -= rotation_speed*xdiff/fabs(xdiff);
+        }
+        if(m_xRot > 360)
+          m_xRot -= 360;
+        else if(m_yRot < 0)
+          m_xRot += 360;
+      }
+      else{
+        m_xRot = x_angle;
+      }
     }
 
     void Ghost::moveTowardCamera(){
