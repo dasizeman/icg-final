@@ -1,5 +1,6 @@
 #include "die.hpp"
 #include "daveutils.hpp"
+#include "ghost.hpp"
 namespace dgfx {
     Die::Die (float x, float y, float z, float xrot, float yrot, float zrot) :
         Cube (x,y,z,xrot,yrot,zrot, 0.5){
@@ -90,7 +91,12 @@ namespace dgfx {
         std::cout << "You rolled a " << m_lastRollValue << "!" << std::endl;
 
         // TODO generate ghosts from m_lastRollValue
-        //
+        for (int i = 0; i < m_lastRollValue; i++) {
+            float x = daveutils::randomFloat(-7.5, 7.5);
+            float y = daveutils::randomFloat(-7.5, 7.5);
+            float z = daveutils::randomFloat(-7.5, 7.5);
+            m_scene->addEntity(std::unique_ptr<Entity>(new Ghost(x, y, z, 0 , 0 , 0)));
+        }
         
         m_lastRollValue = 0;
 

@@ -6,7 +6,7 @@
 
 namespace dgfx {
     Ghost::Ghost(float x, float y, float z, float xrot, float yrot, float zrot) : Cube(x, y, z, xrot, yrot, zrot, 0.5){
-      rotation_speed = 0.2;
+      rotation_speed = 0.5;
       movement_speed = 0.01;
     }
 
