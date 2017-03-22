@@ -27,19 +27,21 @@ namespace dgfx {
       angle = (angle*180)/M_PI;
       m_xRot = -1*angle;
     }
+
+    void Ghost::moveTowardCamera(){
+      vec4 eye = m_scene->m_activeCamera->m_eye;
+      vec3 glm_eye = normalize(vec3(eye.x, eye.y, eye.z) - vec3(m_x, m_y, m_z));
+      m_x += .01*glm_eye.x;
+      m_y += .01*glm_eye.y;
+      m_z += .01*glm_eye.z;
+    }
+
+    void Ghost::update(std::map<std::string, GLuint>& shaderMap){
+        rotateTowardCamera();
+        moveTowardCamera();
+    }
     
     void Ghost::draw(std::map<std::string, GLuint>& shaderMap) {
-        vec4 eye = m_scene->m_activeCamera->m_eye;
-        vec4 cam_up = m_scene->m_activeCamera->m_v;
-        glm::vec3 cube_eye(m_x, m_y, m_z);
-        glm::vec3 glm_eye = glm::normalize(glm::vec3(m_x - eye.x, m_y - eye.y, m_z - eye.z));
-        vec3 norm = m_normals[0];
-        glm::vec3 glm_norm = glm::normalize(glm::vec3(norm.x, norm.y, norm.z));
-        glm::vec3 glm_cross = glm::cross(glm_eye, glm_norm);
-        glm::vec3 up = glm::normalize(glm::vec3(cam_up.x, cam_up.y, cam_up.z));
-
-        rotateTowardCamera();
-        /* glm::mat4 modelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(m_x, m_y, m_z)) * glm::lookAt(cube_eye,cube_eye+glm_eye,up); */
         mat4 modelMatrix = Translate( m_x, m_y, m_z ) * RotateY(m_yRot) * RotateX( m_xRot ) * RotateZ( m_zRot);
 
         glUseProgram( m_activeShader );
@@ -47,7 +49,6 @@ namespace dgfx {
 
         // Set model matrix uniform
         GLuint mainModelMatrix = glGetUniformLocation( m_activeShader, "model_matrix" );
-        /* glUniformMatrix4fv(mainModelMatrix,1, GL_FALSE, glm::value_ptr(modelMatrix)); */
         glUniformMatrix4fv(mainModelMatrix,1, GL_TRUE, modelMatrix);
 
         // Set material property uniforms
