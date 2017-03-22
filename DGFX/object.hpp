@@ -12,6 +12,7 @@ class Object : public Entity {
         float m_x, m_y, m_z;
         vec4 m_ambient, m_diffuse, m_specular;
         std::vector<vec4> m_vertices;
+        std::vector<vec4> m_originalVertices;
         std::vector<vec3> m_normals;
         std::vector<vec2> m_textureCoords;
         std::vector<GLuint> m_textureHandles;

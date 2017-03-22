@@ -89,6 +89,10 @@ namespace dgfx {
     void Ghost::draw(std::map<std::string, GLuint>& shaderMap) {
         mat4 modelMatrix = Translate( m_x, m_y, m_z ) * RotateY(m_yRot) * RotateX( m_xRot ) * RotateZ( m_zRot);
 
+        // Making sure vertices are also updated on the cpu
+        for (int i = 0; i < m_vertices.size(); i++ )
+            m_vertices[i] = modelMatrix * m_originalVertices[i];
+
         glUseProgram( m_activeShader );
         glBindVertexArray( m_vertexArrays[0] );
 

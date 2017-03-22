@@ -87,6 +87,7 @@ namespace dgfx {
     // Called by the scene to draw the object
     void Object::init(std::map<std::string, GLuint>& shaderMap) {
         generateGeometry();
+        m_originalVertices = m_vertices;
         calculateNormals();
 
         std::cout << "Init with active shader = " << m_activeShader << std::endl;
