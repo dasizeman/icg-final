@@ -11,7 +11,8 @@ namespace dgfx {
     protected:
       std::vector<std::string> getTexturePaths();
       void wasPicked( uint16_t triangleIdx );
-      void update(std::map<std::string, GLuint>& shaderMap);
+      /* void update(std::map<std::string, GLuint>& shaderMap); */
+      void draw(std::map<std::string, GLuint>& shaderMap);
     private:
       float getAngle(vec2 delta, vec2 norm);
   };
