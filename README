@@ -1,33 +1,11 @@
-Still needs doing:
+Active Bugs:
 
-Convert cube textures to use a cube map (like the skybox), and pass a texture
-name to the constructor
+- Picking doesn't work correctly with ghosts spawned from die roll
+- Segfault on exit
+- Too much debug printing
 
-Create a ghost subclass of cube and map it accordingly
-
-Create a room subclass of cube and map it accordingly
-
-Create a dice subclass of cube and map it accordingly
- - When this is clicked, it does some sort of spinning animation and lands with one side up
- - Add some number of ghosts to the scene in a circle around 0,0, outside the room cube
- - Have them always move toward the player camera (spooky)
- - If they touch the player, reset or something
- 
- Implement WASD and mouse shooter-like controls
-
-
-What works now:
-
-Planes and cubes with textures from A6
-
-Everything else from A6
-
-Picking (calls object's wasPicked() method)
-
-Cubes "die" and are removed from the scene when picked
-A particle burst animation occurs when a cube is clicked and is removed
-
-^ These two behaviors will need to be moved into the ghost subclass
-
-
-To build, run ./build.sh in the FinalProject directory.  It will place an executable called "Main" there.
+Required libraries for Ubuntu:
+freeglut3-dev
+libglew-dev
+libxmu-dev 
+libxi-dev

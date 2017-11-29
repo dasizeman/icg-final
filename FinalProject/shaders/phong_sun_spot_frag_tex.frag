@@ -1,4 +1,4 @@
-#version 150
+#version 130
 // per-fragment interpolated values from the vertex shader
 in  vec3 fN;
 in  vec3 directionalL;

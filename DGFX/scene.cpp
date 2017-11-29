@@ -1,5 +1,6 @@
 #include <sstream>
 #include <cassert>
+#include <algorithm>
 
 #include "scene.hpp"
 #include "daveutils.hpp"
